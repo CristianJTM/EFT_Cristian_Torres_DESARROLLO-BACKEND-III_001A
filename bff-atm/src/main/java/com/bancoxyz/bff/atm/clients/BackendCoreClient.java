@@ -1,11 +1,15 @@
 package com.bancoxyz.bff.atm.clients;
 
+import com.bancoxyz.bff.atm.config.FeignClientConfig;
 import com.bancoxyz.bff.atm.dtos.RetiroAtmRequestDTO;
 import com.bancoxyz.bff.atm.dtos.core.CuentaCoreDTO;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.*;
 
-@FeignClient(name = "backend-core")
+@FeignClient(
+        name = "backend-core",
+        configuration = FeignClientConfig.class
+)
 public interface BackendCoreClient {
 
     @GetMapping("/api/cuentas/{cuentaId}")
