@@ -6,6 +6,9 @@ import com.bancoxyz.bff.web.dtos.MovimientoWebDTO;
 import com.bancoxyz.bff.web.dtos.ResumenMovimientosDTO;
 import com.bancoxyz.bff.web.dtos.core.CuentaCoreDTO;
 import com.bancoxyz.bff.web.dtos.core.TransaccionCoreDTO;
+import com.bancoxyz.bff.web.dtos.management.ActualizarCuentaRequest;
+import com.bancoxyz.bff.web.dtos.management.CrearCuentaRequest;
+import com.bancoxyz.bff.web.dtos.management.CuentaResponse;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -14,21 +17,23 @@ import java.util.List;
 @Service
 public class BffWebService {
 
-    private final BackendCoreResilientService backendCoreService;
+    private final AccountServiceResilientService accountService;
+    private final AccountManagementResilientService accountManagementService;
 
     public BffWebService(
-            BackendCoreResilientService backendCoreService) {
-
-        this.backendCoreService = backendCoreService;
+            AccountServiceResilientService accountService,
+            AccountManagementResilientService accountManagementService) {
+        this.accountService = accountService;
+        this.accountManagementService = accountManagementService;
     }
 
     public CuentaWebDetalleDTO obtenerDetalleCuenta(Long cuentaId) {
 
         CuentaCoreDTO cuenta =
-                backendCoreService.obtenerCuenta(cuentaId);
+                accountService.obtenerCuenta(cuentaId);
 
         List<TransaccionCoreDTO> transacciones =
-                backendCoreService.obtenerTransaccionesPorCuenta(cuentaId);
+                accountService.obtenerTransaccionesPorCuenta(cuentaId);
 
         ResumenMovimientosDTO resumenMovimientos =
                 construirResumen(transacciones);
@@ -59,10 +64,10 @@ public class BffWebService {
     public CuentaWebResumenDTO obtenerResumenCuenta(Long cuentaId) {
 
         CuentaCoreDTO cuenta =
-                backendCoreService.obtenerCuenta(cuentaId);
+                accountService.obtenerCuenta(cuentaId);
 
         List<TransaccionCoreDTO> transacciones =
-                backendCoreService.obtenerTransaccionesPorCuenta(cuentaId);
+                accountService.obtenerTransaccionesPorCuenta(cuentaId);
 
         ResumenMovimientosDTO resumenMovimientos =
                 construirResumen(transacciones);
@@ -117,5 +122,28 @@ public class BffWebService {
         movimiento.setTipo(transaccion.getTipo());
 
         return movimiento;
+    }
+
+
+    public CuentaResponse crearCuenta(CrearCuentaRequest request) {
+        return accountManagementService.crear(request);
+    }
+
+    public List<CuentaResponse> listarCuentas() {
+        return accountManagementService.listar();
+    }
+
+    public CuentaResponse buscarCuentaAdministrativa(Long id) {
+        return accountManagementService.buscarPorId(id);
+    }
+
+    public CuentaResponse actualizarCuenta(
+            Long id,
+            ActualizarCuentaRequest request) {
+        return accountManagementService.actualizar(id, request);
+    }
+
+    public void eliminarCuenta(Long id) {
+        accountManagementService.eliminar(id);
     }
 }
