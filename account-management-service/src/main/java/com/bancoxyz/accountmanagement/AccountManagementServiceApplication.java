@@ -1,4 +1,4 @@
-package com.bancoxyz.account_management_service;
+package com.bancoxyz.accountmanagement;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
