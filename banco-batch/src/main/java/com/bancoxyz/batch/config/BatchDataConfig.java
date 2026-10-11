@@ -1,7 +1,5 @@
 package com.bancoxyz.batch.config;
 
-import com.bancoxyz.batch.repository.TransaccionProcesadaRepository;
-import org.springframework.batch.infrastructure.item.data.RepositoryItemReader;
 import org.springframework.batch.infrastructure.item.file.FlatFileItemReader;
 import org.springframework.batch.infrastructure.item.file.builder.FlatFileItemReaderBuilder;
 import org.springframework.batch.infrastructure.item.support.SynchronizedItemStreamReader;
@@ -9,14 +7,12 @@ import org.springframework.batch.infrastructure.item.support.builder.Synchronize
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.FileSystemResource;
-import org.springframework.data.domain.Sort;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.List;
-import java.util.Map;
 
 @Configuration
 public class BatchDataConfig {
@@ -125,7 +121,7 @@ public class BatchDataConfig {
                 .name("transaccionesReaderBase")
                 .resource(
                         new FileSystemResource(
-                                DATA_PATH + "transacciones.csv"
+                                DATA_PATH + "movimientos_financieros_diarios.csv"
                         )
                 )
                 .linesToSkip(1)
@@ -193,7 +189,7 @@ public class BatchDataConfig {
                 .name("interesesReaderBase")
                 .resource(
                         new FileSystemResource(
-                                DATA_PATH + "intereses.csv"
+                                DATA_PATH + "intereses_trimestrales.csv"
                         )
                 )
                 .linesToSkip(1)
@@ -274,7 +270,7 @@ public class BatchDataConfig {
                 .name("cuentasAnualesReaderBase")
                 .resource(
                         new FileSystemResource(
-                                DATA_PATH + "cuentas_anuales.csv"
+                                DATA_PATH + "estados_financieros_anuales.csv"
                         )
                 )
                 .linesToSkip(1)
