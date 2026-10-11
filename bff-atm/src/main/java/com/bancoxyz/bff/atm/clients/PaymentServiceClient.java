@@ -7,19 +7,15 @@ import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.*;
 
 @FeignClient(
-        name = "backend-core",
+        name = "payment-service",
+        contextId = "paymentServiceClient",
         configuration = FeignClientConfig.class
 )
-public interface BackendCoreClient {
-
-    @GetMapping("/api/cuentas/{cuentaId}")
-    CuentaCoreDTO obtenerCuenta(
-            @PathVariable Long cuentaId
-    );
+public interface PaymentServiceClient {
 
     @PostMapping("/api/cuentas/{cuentaId}/retiros")
     CuentaCoreDTO realizarRetiro(
-            @PathVariable Long cuentaId,
+            @PathVariable("cuentaId") Long cuentaId,
             @RequestBody RetiroAtmRequestDTO retiro
     );
 }

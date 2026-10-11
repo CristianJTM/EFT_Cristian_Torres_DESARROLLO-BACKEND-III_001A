@@ -67,7 +67,7 @@ public class GlobalExceptionHandler {
                 "status", HttpStatus.SERVICE_UNAVAILABLE.value(),
                 "timestamp", LocalDateTime.now(),
                 "message", ex.getMessage(),
-                "error", "Backend Core no disponible"
+                "error", "Microservicio no disponible"
         );
 
         return ResponseEntity
