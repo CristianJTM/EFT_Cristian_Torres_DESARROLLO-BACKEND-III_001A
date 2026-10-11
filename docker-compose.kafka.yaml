@@ -337,12 +337,29 @@ services:
           --bootstrap-server kafka-1:9092 \
           --create \
           --if-not-exists \
+          --topic transacciones-bancarias \
+          --partitions 3 \
+          --replication-factor 3
+
+        echo "Topic transacciones-bancarias creado/verificado."
+
+        kafka-topics \
+          --bootstrap-server kafka-1:9092 \
+          --create \
+          --if-not-exists \
           --topic cuentas-eventos \
           --partitions 3 \
           --replication-factor 3
-  
+
         echo "Topic cuentas-eventos creado/verificado."
-        
+
+        echo "Verificando transacciones-bancarias..."
+        kafka-topics \
+          --bootstrap-server kafka-1:9092 \
+          --describe \
+          --topic transacciones-bancarias
+
+        echo "Verificando cuentas-eventos..."
         kafka-topics \
           --bootstrap-server kafka-1:9092 \
           --describe \
