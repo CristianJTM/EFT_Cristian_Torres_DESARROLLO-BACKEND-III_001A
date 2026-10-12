@@ -1,3 +1,5 @@
+package com.bancoxyz.bff.web.controllers;
+
 import com.bancoxyz.bff.web.dtos.CuentaWebDetalleDTO;
 import com.bancoxyz.bff.web.dtos.CuentaWebResumenDTO;
 import com.bancoxyz.bff.web.dtos.management.ActualizarCuentaRequest;
