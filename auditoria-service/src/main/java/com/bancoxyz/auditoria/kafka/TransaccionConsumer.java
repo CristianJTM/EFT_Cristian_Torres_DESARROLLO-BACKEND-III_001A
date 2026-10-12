@@ -13,7 +13,7 @@ public class TransaccionConsumer {
     @KafkaListener(
             topics = TOPIC,
             groupId = "${spring.kafka.consumer.group-id}",
-            containerFactory = "kafkaListenerContainerFactory"
+            containerFactory = "transaccionKafkaListenerContainerFactory"
     )
     public void consumirTransaccion(TransaccionEvento evento) {
 

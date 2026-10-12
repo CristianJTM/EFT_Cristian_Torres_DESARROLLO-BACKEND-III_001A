@@ -13,7 +13,7 @@ public class CuentaConsumer {
     @KafkaListener(
             topics = TOPIC,
             groupId = "${spring.kafka.consumer.group-id}",
-            containerFactory = "kafkaListenerContainerFactory"
+            containerFactory = "cuentaKafkaListenerContainerFactory"
     )
     public void consumirCuenta(CuentaEvento evento) {
 
@@ -27,4 +27,3 @@ public class CuentaConsumer {
         log.info("========================================");
     }
 }
-
