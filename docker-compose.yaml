@@ -57,14 +57,13 @@ services:
     ports:
       - "9000:9000"
 
-
   # ========================================
-  # Backend Core
+  # PAYMENT-SERVICE
   # ========================================
-  backend-core:
+  payment-service:
     build:
-      context: ./backend-core
-    container_name: banco-xyz-backend-core
+      context: ./payment-service
+    container_name: banco-xyz-payment-service
     restart: unless-stopped
     depends_on:
       - mysql
@@ -75,7 +74,50 @@ services:
       DB_USERNAME: banco_user
       DB_PASSWORD: banco_password
       EUREKA_SERVER_URL: http://discovery-server:8761/eureka/
-      KAFKA_BOOTSTRAP_SERVERS: ${KAFKA_BOOTSTRAP_SERVERS}
+      KAFKA_BOOTSTRAP_SERVERS: 54.89.231.191:29092,54.89.231.191:39092,54.89.231.191:49092
+      AUTH_SERVER_URL: http://auth-server:9000
+    ports:
+      - "8088:8088"
+
+  # ========================================
+  # ACCOUNT-MANAGEMENT-SERVICE
+  # ========================================
+  account-management-service:
+    build:
+      context: ./account-management-service
+    container_name: banco-xyz-account-management-service
+    restart: unless-stopped
+    depends_on:
+      - mysql
+      - discovery-server
+      - auth-server
+    environment:
+      DB_URL: jdbc:mysql://mysql:3306/banco_xyz?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+      DB_USERNAME: banco_user
+      DB_PASSWORD: banco_password
+      EUREKA_SERVER_URL: http://discovery-server:8761/eureka/
+      KAFKA_BOOTSTRAP_SERVERS: 54.89.231.191:29092,54.89.231.191:39092,54.89.231.191:49092
+      AUTH_SERVER_URL: http://auth-server:9000
+    ports:
+      - "8089:8089"
+
+  # ========================================
+  # ACCOUNT-SERVICE
+  # ========================================
+  account-service:
+    build:
+      context: ./account-service
+    container_name: banco-xyz-account-service
+    restart: unless-stopped
+    depends_on:
+      - mysql
+      - discovery-server
+      - auth-server
+    environment:
+      DB_URL: jdbc:mysql://mysql:3306/banco_xyz?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+      DB_USERNAME: banco_user
+      DB_PASSWORD: banco_password
+      EUREKA_SERVER_URL: http://discovery-server:8761/eureka/
       AUTH_SERVER_URL: http://auth-server:9000
     ports:
       - "8081:8081"
@@ -90,7 +132,7 @@ services:
     container_name: banco-xyz-bff-web
     restart: unless-stopped
     depends_on:
-      - backend-core
+      - account-service
       - auth-server
       - discovery-server
     environment:
@@ -109,7 +151,7 @@ services:
     container_name: banco-xyz-bff-mobile
     restart: unless-stopped
     depends_on:
-      - backend-core
+      - account-service
       - auth-server
       - discovery-server
     environment:
@@ -128,7 +170,8 @@ services:
     container_name: banco-xyz-bff-atm
     restart: unless-stopped
     depends_on:
-      - backend-core
+      - account-service
+      - payment-service
       - auth-server
       - discovery-server
     environment:
@@ -150,7 +193,7 @@ services:
       - discovery-server
     environment:
       EUREKA_SERVER_URL: http://discovery-server:8761/eureka/
-      KAFKA_BOOTSTRAP_SERVERS: ${KAFKA_BOOTSTRAP_SERVERS}
+      KAFKA_BOOTSTRAP_SERVERS: 54.89.231.191:29092,54.89.231.191:39092,54.89.231.191:49092
     ports:
       - "8086:8086"
 
